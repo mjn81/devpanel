@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { NavBar, NavBarList, NavBarListItem } from "../nav";
 import { MENU_ITEMS } from "src/constants";
+import { useCurrentPath } from "src/hooks";
 
 const Layout = styled.div`
   display: grid;
@@ -22,8 +23,8 @@ const Layout = styled.div`
 
 export const MainLayout = () => {
   const navigator = useNavigate();
-  
-  const [activeItem, setActiveItem] = useState({active: 1});
+  const currentRoute = useCurrentPath();
+  const [activeItem, setActiveItem] = useState({active: currentRoute ? currentRoute.id : 1});
   return (
     <Layout>
       <NavBar>
