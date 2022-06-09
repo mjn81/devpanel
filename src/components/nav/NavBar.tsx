@@ -13,7 +13,7 @@ export const NavBar = styled.nav`
 	border-right: 1px solid ${({ theme }) => theme.colors.border};
 	min-width: 85px;
 	height: 100vh;
-	box-shadow: 27px 0px 44px -38px rgba(199, 199, 199, 1);
+	box-shadow: ${({ theme }) => theme.details.nav_shadow};
 `;
 
 export const NavBarList = styled.ul`
@@ -23,6 +23,7 @@ export const NavBarList = styled.ul`
 `;
 
 export const NavBarListItem = styled.li`
+	margin: 0.5rem 0;
 	font-size: 2rem;
 	cursor: pointer;
 	position: relative;
@@ -31,7 +32,7 @@ export const NavBarListItem = styled.li`
 	justify-content: center;
 	height: fit-content;
 	padding: 0.5rem;
-	color: ${({ theme }) => theme.colors.primary};
+	color: ${({ theme }) => theme.colors.de_active};
 	border-radius: 10px;
 	transition: all 200ms ease-in;
 	::after {
@@ -46,9 +47,17 @@ export const NavBarListItem = styled.li`
 		border-bottom-right-radius: 12px;
 	}
 	:hover {
-		background-color: ${({ theme }) => theme.colors.hover_bg};
+		color: ${({ theme }) => theme.colors.primary};
+		background-color: ${({ theme }) => theme.colors.bg_hover};
 	}
 	&:hover::after {
-    right: 3.8rem;
+		right: 3.8rem;
+	}
+	&.active {
+		color: ${({ theme }) => theme.colors.primary};
+		 background-color: ${({ theme }) => theme.colors.bg_hover};
+	}
+	&.active::after {
+		/* right: 3.8rem; */
 	}
 `;

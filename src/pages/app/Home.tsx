@@ -1,7 +1,11 @@
-export const Home = () => {
+import { Header } from "src/components";
+
+export const Home = ({title }) => {
+	
 	return (
 		<div>
-      <h1>home</h1>
+			<Header />
+			<h1>{title}</h1>
 		</div>
 	);
 };

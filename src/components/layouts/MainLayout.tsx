@@ -1,8 +1,8 @@
-import { Outlet } from "react-router-dom";
-
-import { NavBar, NavBarList, NavBarListItem } from "../nav"
-
+import { Outlet, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import styled from 'styled-components';
+
+import { NavBar, NavBarList, NavBarListItem } from "../nav";
 import { MENU_ITEMS } from "src/constants";
 
 const Layout = styled.div`
@@ -15,21 +15,26 @@ const Layout = styled.div`
 
   & > main {
     grid-column: 2 / span 19;
-    padding: 1rem;
+    padding: 2rem;
   }
 `;
 
 
 export const MainLayout = () => {
-  console.log(MENU_ITEMS);
+  const navigator = useNavigate();
   
+  const [activeItem, setActiveItem] = useState({active: 1});
   return (
     <Layout>
       <NavBar>
         <NavBarList>
           {
             MENU_ITEMS.map((item) => (
-              <NavBarListItem key={item.id}>
+              <NavBarListItem key={item.id} value={item.id} onClick={() => {
+                setActiveItem({ active: item.id });
+                navigator(item.path , { replace: true });
+              }}
+              className={activeItem.active === item.id ? 'active' : ''}>
                 <item.icon />
               </NavBarListItem>
             ))
