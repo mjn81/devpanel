@@ -11,5 +11,5 @@ export const LIGHT = {
 
 export const DETAILS = {
 	nav_shadow: '27px 0px 44px -38px rgba(199, 199, 199, 1)',
-	card_shadow: '0px 0px 50px -10px rgba(163,163,163,0.25);',
+	card_shadow: '0px 0px 50px -15px rgba(163,163,163,0.25);',
 };
