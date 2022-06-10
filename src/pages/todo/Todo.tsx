@@ -1,51 +1,156 @@
 import { useState } from 'react';
-import { CheckBox, Header, TodoCard, TodoLayout } from 'src/components';
+import { v4 } from 'uuid';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+import {
+	CheckBox,
+	Header,
+	TodoCard,
+	TodoLayout,
+	TodoTitle,
+} from 'src/components';
+
+const item = {
+	id: v4(),
+	title: 'Hello world',
+	desc: 'Clean the house',
+};
+
+const item2 = {
+	id: v4
+	(),
+	title: 'Hello world',
+	desc: 'make a coffe',
+};
 
 export const Todo = ({ title }) => {
-	const [todo, setTodo] = useState();
+	const [textTitle, setTextTitle] = useState('');
+	const [desc, setDesc] = useState('');
+	const [todo, setTodo] = useState({
+		todo: {
+			title: 'Todo',
+			items: [item, item2],
+		},
+		'in-progress': {
+			title: 'In Progress',
+			items: [],
+		},
+		done: {
+			title: 'Completed',
+			items: [],
+		},
+	});
+
+	const handleDragEnd = ({ destination, source }) => {
+		if (!destination) {
+			return;
+		}
+
+		if (
+			destination.index === source.index &&
+			destination.droppableId === source.droppableId
+		) {
+			return;
+		}
+
+		// Creating a copy of item before removing it from state
+		const itemCopy = { ...todo[source.droppableId].items[source.index] };
+
+		setTodo((prev) => {
+			prev = { ...prev };
+			// Remove from previous items array
+			prev[source.droppableId].items.splice(source.index, 1);
+
+			// Adding to new items array location
+			prev[destination.droppableId].items.splice(
+				destination.index,
+				0,
+				itemCopy
+			);
+
+			return prev;
+		});
+	};
+
+	const addItem = () => {
+		setTodo((prev) => {
+			return {
+				...prev,
+				todo: {
+					title: 'Todo',
+					items: [
+						{
+							id: v4
+							(),
+							title: textTitle,
+							desc: desc,
+						},
+						...prev.todo.items,
+					],
+				},
+			};
+		});
+
+		setTextTitle('');
+		setDesc('');
+	};
 
 	return (
 		<div>
 			<Header />
 			<h1>{title}</h1>
-			<TodoLayout>
-				<TodoCard>
-					<section className="check-sec">
-						<CheckBox />
-					</section>
-					<section className="content-sec">
-						<h4 className="title">hello world</h4>
-						<p className="desc">this is the first part of the todo list</p>
-					</section>
-				</TodoCard>
-				<TodoCard>
-					<section className="check-sec">
-						<CheckBox />
-					</section>
-					<section className="content-sec">
-						<h4 className="title">hello world</h4>
-						<p className="desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae dicta minima quod iusto libero odio sint ab perferendis quia magnam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, quaerat. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequatur nam unde illo quas soluta dolores quae magnam esse explicabo vitae.</p>
-					</section>
-				</TodoCard>
-				<TodoCard>
-					<section className="check-sec">
-						<CheckBox />
-					</section>
-					<section className="content-sec">
-						<h4 className="title">hello world</h4>
-						<p className="desc">this is the first part of the todo list</p>
-					</section>
-				</TodoCard>
-				<TodoCard>
-					<section className="check-sec">
-						<CheckBox />
-					</section>
-					<section className="content-sec">
-						<h4 className="title">hello world</h4>
-						<p className="desc">this is the first part of the todo list</p>
-					</section>
-				</TodoCard>
-			</TodoLayout>
+			<DragDropContext onDragEnd={handleDragEnd}>
+				{Object.entries(todo).map(([key , data]) => {
+					return (
+						<TodoLayout key={key}>
+							<TodoTitle>{data.title}</TodoTitle>
+							<Droppable droppableId={key} className="droppable">
+								{(provided, snapshot) => {
+									return (
+										<div
+											ref={provided.innerRef}
+											{...provided.droppableProps}
+										>
+											{data.items.map((el, index) => {
+												return (
+													<Draggable
+														key={el.id}
+														index={index}
+														draggableId={el.id}
+													>
+														{(provided, snapshot) => {
+															return (
+																<TodoCard
+																	className={` ${
+																		snapshot.isDragging && 'dragging'
+																	}`}
+																	ref={provided.innerRef}
+																	{...provided.draggableProps}
+																	{...provided.dragHandleProps}
+																>
+																	<section className="content-sec">
+																		<h4 className="title">
+																			{el.title}
+																		</h4>
+																		<p className="desc">
+																			{el.desc}
+																		</p>
+																	</section>
+																</TodoCard>
+															);
+														}}
+													</Draggable>
+												);
+											})}
+											{provided.placeholder}
+										</div>
+									);
+								}}
+							</Droppable>
+						</TodoLayout>
+					);
+				})}
+			</DragDropContext>
 		</div>
 	);
 };

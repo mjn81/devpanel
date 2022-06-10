@@ -6,6 +6,7 @@ export const CheckBox = styled.input.attrs({
 	appearance: none;
 	background-color: ${({ theme }) => theme.colors.white};
 	border: 1px solid ${({ theme }) => theme.colors.de_active};
+	outline: none;
 	transition: all 150ms ease-in-out;
 	width: 1.5rem;
 	height: 1.5rem;
