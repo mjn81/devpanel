@@ -3,12 +3,18 @@ import { v4 } from 'uuid';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import {
+	Button,
 	CheckBox,
+	FixedSection,
 	Header,
+	HorizontalFlex,
+	Input,
 	TodoCard,
 	TodoLayout,
 	TodoTitle,
+	VerticalFlex,
 } from 'src/components';
+import { DIRECTIONS } from 'src/constants';
 
 const item = {
 	id: v4(),
@@ -17,8 +23,7 @@ const item = {
 };
 
 const item2 = {
-	id: v4
-	(),
+	id: v4(),
 	title: 'Hello world',
 	desc: 'make a coffe',
 };
@@ -80,8 +85,7 @@ export const Todo = ({ title }) => {
 					title: 'Todo',
 					items: [
 						{
-							id: v4
-							(),
+							id: v4(),
 							title: textTitle,
 							desc: desc,
 						},
@@ -100,17 +104,14 @@ export const Todo = ({ title }) => {
 			<Header />
 			<h1>{title}</h1>
 			<DragDropContext onDragEnd={handleDragEnd}>
-				{Object.entries(todo).map(([key , data]) => {
+				{Object.entries(todo).map(([key, data]) => {
 					return (
 						<TodoLayout key={key}>
 							<TodoTitle>{data.title}</TodoTitle>
 							<Droppable droppableId={key} className="droppable">
 								{(provided, snapshot) => {
 									return (
-										<div
-											ref={provided.innerRef}
-											{...provided.droppableProps}
-										>
+										<div ref={provided.innerRef} {...provided.droppableProps}>
 											{data.items.map((el, index) => {
 												return (
 													<Draggable
@@ -129,12 +130,8 @@ export const Todo = ({ title }) => {
 																	{...provided.dragHandleProps}
 																>
 																	<section className="content-sec">
-																		<h4 className="title">
-																			{el.title}
-																		</h4>
-																		<p className="desc">
-																			{el.desc}
-																		</p>
+																		<h4 className="title">{el.title}</h4>
+																		<p className="desc">{el.desc}</p>
 																	</section>
 																</TodoCard>
 															);
@@ -151,6 +148,26 @@ export const Todo = ({ title }) => {
 					);
 				})}
 			</DragDropContext>
+
+			<FixedSection direction={DIRECTIONS.BOTTOM}>
+				<HorizontalFlex>
+					<VerticalFlex padding="15px" gap="15px">
+						<Input
+							type="text"
+							placeholder="write a title"
+							value={textTitle}
+							onChange={(e) => setTextTitle(e.currentTarget.value)}
+						/>
+						<Input
+							type="text"
+							placeholder="write a description"
+							value={desc}
+							onChange={(e) => setDesc(e.currentTarget.value)}
+						/>
+					</VerticalFlex>
+					<Button>Add</Button>
+				</HorizontalFlex>
+			</FixedSection>
 		</div>
 	);
 };

@@ -33,11 +33,5 @@ export const TodoCard = styled(Card).attrs({
 			font-size: 1.2rem;
 			font-weight: 700;
 		}
-
-		p.desc {
-			font-weight: 400;
-			margin-top: 10px;
-		}
 	}
 `;
-
